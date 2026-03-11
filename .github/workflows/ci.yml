@@ -8,25 +8,19 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
+        - uses: actions/checkout@v3
 
-        - name: Setup .NET
-          uses: actions/setup-dotnet@v3
+        - uses: actions/setup-dotnet@v3
           with:
             dotnet-version: 9.0
 
-        - name: Restore
-          run: dotnet restore
+        - run: dotnet restore
 
-        - name: Build
-          run: dotnet build
+        - run: dotnet build --configuration Release
 
-        - name: Test
-          run: dotnet test
+        - run: dotnet test
 
-        - name: Upload artifact
-          uses: actions/upload-artifact@v4
-          with:
-            name: app
-            path: publish
+        - run: dotnet publish -c Release -o publish
+  
+        - name: Build Docker Image
+          run: docker build -t product-api .
